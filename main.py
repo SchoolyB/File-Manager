@@ -1,13 +1,15 @@
-from tkinter import *
+
 import shutil
 import os
 import easygui
+
 from tkinter import filedialog
+from tkinter import *
 from tkinter import messagebox as mb
 
 
 def openNewWindow():
-    read: easygui.fileopenbox()
+    read = easygui.fileopenbox()
     return read
 
 
@@ -16,7 +18,7 @@ def openFile():
     try:
         os.startfile(string)
     except:
-        mbshowinfo('confirmation', 'File Not Found')
+        mb.showinfo('confirmation', 'File Not Found')
 
 
 def copyFile():
@@ -89,7 +91,7 @@ root = Tk()
 canv = Canvas(root, width=500, height=420, bg='white')
 canv.grid(row=0, column=2)
 # creating label and buttons to perform operations
-Label(root, text="TechVidvan File Manager", font=(
+Label(root, text="File Manager v1.0.0", font=(
     "Helvetica", 16), fg="blue").grid(row=5, column=2)
 Button(root, text="Open a File", command=openFile).grid(row=15, column=2)
 Button(root, text="Copy a File", command=copyFile).grid(row=25, column=2)
