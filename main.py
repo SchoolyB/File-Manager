@@ -1,3 +1,4 @@
+from fileinput import filename
 import sys
 from tkinter import *
 import tkinter.filedialog as fd
@@ -6,58 +7,60 @@ import os
 import shutil
 import subprocess, sys
 
+
 def open_file():
-    file = fd.askopenfilename(title='Choose a file of any type', filetypes=('All files', "*.* *"))
-    os.startfile(os.path.abspath(file))
+    
+    file = fd.askopenfilename(title='Choose a file of any type', filetypes=[('All files', "*.*")])
+    subprocess.call(['xdg-open', file])
 
 
 def copy_file():
-    fileSource = fd.askopenfilename(title = 'choose a file to copy', filetypes = [('All files', '*.*')])
-    fileDestination=fd.askdirectory(title = 'Which folder would you like to place this file?')
+    fileSource = fd.askopenfilename(title='choose a file to copy', filetypes=[('All files', '*.*')])
+    fileDestination = fd.askdirectory(title='Which folder would you like to place this file?')
 
     try:
         shutil.copy(fileSource, fileDestination)
-        mb.showinfo(title = 'File Copied!',message = 'Your file has been moved to')
+        mb.showinfo(title='File Copied!',message='Your file has been moved to')
     except:
-        mb.showerror(title = 'Error!', message = 'We were unable to copy your file, Please try again')
+        mb.showerror(
+            title='Error!', message='We were unable to copy your file, Please try again')
 
 
 def delete_file():
-    file=fd.askopenfilename(title = 'Choose a file to delete', filetypes = [("All files", "*.*")])
+    file = fd.askopenfilename(title='Choose a file to delete', filetypes=[("All files", "*.*")])
     os.remove(os.path.abspath(file))
-    mb.showinfo(title = 'File deleted',message = 'Your desired file has been deleted')
+    mb.showinfo(title='File deleted',message='Your desired file has been deleted')
 
 
 def rename_file():
-    file=fd.askopenfilename(title = 'Choose a file to rename', filetypes = [("All files", "*.*")])
-    rename_wn=Toplevel(root)
+    file = fd.askopenfilename(title='Choose a file to rename', filetypes=[("All files", "*.*")])
+    rename_wn = Toplevel(root)
     rename_wn.title("Rename the file to")
     rename_wn.geometry("250x70")
     rename_wn.resizable(0, 0)
-    Label(rename_wn, text = 'What should be the new name of the file?',font = ("Times New Roman", 10)).place(x = 0, y=0)
-    new_name=Entry(rename_wn, width = 40, font = ("Times New Roman", 10))
-    new_name.place(x = 0, y = 30)
-    new_file_name=os.path.join(os.path.dirname(file), new_name.get()+os.path.splitext(file)[1])
+    Label(rename_wn, text='What should be the new name of the file?',font=("Times New Roman", 10)).place(x=0, y=0)
+    new_name = Entry(rename_wn, width=40, font=("Times New Roman", 10))
+    new_name.place(x=0, y=30)
+    new_file_name = os.path.join(os.path.dirname(file), new_name.get()+os.path.splitext(file)[1])
     os.rename(file, new_file_name)
-    mb.showinfo(title = "File Renamed",
-    message = 'Your desired file has been renamed')
+    mb.showinfo(title="File Renamed",message='Your desired file has been renamed')
 
 
 def open_folder():
-    folder=fd.askdirectory(title = "Select Folder to open")
-    os.startfile(folder)
+    folder = fd.askdirectory(title="Select Folder to open")
+    subprocess.call(['xdg-open', folder])
 
 
 def delete_folder():
-    folderToDelete=fd.askdirectory(title = 'Choose a folder to delete')
+    folderToDelete = fd.askdirectory(title='Choose a folder to delete')
     os.rmdir(folderToDelete)
     mb.showinfo("Folder Deleted", "Your desired folder has been deleted")
 
 
 def move_folder():
-    sourceFolder=fd.askdirectory(title = 'Select the folder you want to move')
-    mb.showinfo(message = 'You just selected the folder to move, now please select the desired destination where you want to move the folder to')
-    destinationFolder=fd.askdirectory(title = 'Where to move the folder to')
+    sourceFolder = fd.askdirectory(title='Select the folder you want to move')
+    mb.showinfo(message='You just selected the folder to move, now please select the desired destination where you want to move the folder to')
+    destinationFolder = fd.askdirectory(title='Where to move the folder to')
     try:
         shutil.move(sourceFolder, destinationFolder)
         mb.showinfo("Folder moved", 'Your desired folder has been moved to the location you wanted')
@@ -66,64 +69,63 @@ def move_folder():
 
 
 def list_files_in_folder():
-    i=0
+    i = 0
 
-    folder=fd.askdirectory(title = 'Select the folder twhose files you want to list.')
-    files=os.listdir(os.path.abspath(folder))
+    folder = fd.askdirectory(title='Select the folder twhose files you want to list.')
+    files = os.listdir(os.path.abspath(folder))
 
-    list_files_wn=Toplevel(root)
+    list_files_wn = Toplevel(root)
     list_files_wn.title(f'Files in {folder}')
     list_files_wn.geometry('250x250')
     list_files_wn.resizable(0, 0)
 
-    listbox=Listbox(
-    list_files_wn, selectbackground = 'SteelBlue', font = ("Georgia", 10))
-    listbox.place(relx = 0, rely = 0, relheight = 1, relwidth=1)
+    listbox = Listbox(list_files_wn, selectbackground='SteelBlue', font=("Georgia", 10))
+    listbox.place(relx=0, rely=0, relheight=1, relwidth=1)
 
-    scrollbar=Scrollbar(listbox, orient = VERTICAL, command = listbox.yview)
-    scrollbar.pack(side = RIGHT, fill = Y)
+    scrollbar = Scrollbar(listbox, orient=VERTICAL, command=listbox.yview)
+    scrollbar.pack(side=RIGHT, fill=Y)
 
-    listbox.config(yscrollcommand = scrollbar.set)
+    listbox.config(yscrollcommand=scrollbar.set)
 
     while i < len(files):
         listbox.insert(END, files[i])
         i += 1
 
 
-title="File'O'Tron"
-background='White'
-button_font=("Times New Roman", 13)
-button_background='Gray'
+title = "File'O'Tron"
+background = 'White'
+button_font = ("Times New Roman", 13)
+button_background = 'Gray'
 
 
-root=Tk()
+root = Tk()
 root.title(title)
 root.geometry('250x400')
 root.resizable(0, 0)
-root.config(bg = background)
+root.config(bg=background)
 
 
 # Creating and placing the components in the window
 
 
-Label(root, text = title, font = ("Comic Sans MS", 15),
-      bg = background, wraplength = 250).place(x = 20, y=0)
-Button(root, text = 'Open a file', width = 20, font = button_font,
-       bg = button_background, command = open_file).place(x = 30, y=50)
-Button(root, text = 'Copy a file', width = 20, font = button_font,
-       bg = button_background, command = copy_file).place(x = 30, y=90)
-Button(root, text = 'Rename a file', width = 20, font = button_font,
-       bg = button_background, command = rename_file).place(x = 30, y=130)
-Button(root, text = 'Delete a file', width = 20, font = button_font,
-       bg = button_background, command = delete_file).place(x = 30, y=170)
-Button(root, text = 'Open a folder', width = 20, font = button_font,
-       bg = button_background, command = open_folder).place(x = 30, y=210)
-Button(root, text = 'Delete a folder', width = 20, font = button_font,
-       bg = button_background, command = delete_folder).place(x = 30, y=250)
-Button(root, text = 'Move a folder', width = 20, font = button_font,
-       bg = button_background, command = move_folder).place(x = 30, y=290)
-Button(root, text = 'List all files in a folder', width = 20, font = button_font,
-       bg = button_background, command = list_files_in_folder).place(x = 30, y=330)
+Label(root, text=title, font=("Comic Sans MS", 15),
+      bg=background, wraplength=250).place(x=20, y=0)
+Button(root, text='Open a file', width=20, font=button_font,
+       bg=button_background, command=open_file).place(x=30, y=50)
+Button(root, text='Copy a file', width=20, font=button_font,
+       bg=button_background, command=copy_file).place(x=30, y=90)
+Button(root, text='Rename a file', width=20, font=button_font,
+       bg=button_background, command=rename_file).place(x=30, y=130)
+Button(root, text='Delete a file', width=20, font=button_font,
+       bg=button_background, command=delete_file).place(x=30, y=170)
+Button(root, text='Open a folder', width=20, font=button_font,
+       bg=button_background, command=open_folder).place(x=30, y=210)
+Button(root, text='Delete a folder', width=20, font=button_font,
+       bg=button_background, command=delete_folder).place(x=30, y=250)
+Button(root, text='Move a folder', width=20, font=button_font,
+       bg=button_background, command=move_folder).place(x=30, y=290)
+Button(root, text='List all files in a folder', width=20, font=button_font,
+       bg=button_background, command=list_files_in_folder).place(x=30, y=330)
 
 # Finalizing the window
 
