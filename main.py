@@ -1,19 +1,29 @@
-from fileinput import filename
-import sys
+#VERSION: 1.0.6
+#AUTHOR: Marshall Burns a.k.a Schooly B
+
+
+####!!!---KNOWN ISSUES:     ---!!!###
+# THE RENAME_FILE() FUNCTION IS BUGGED
+
+
+###IMPORT 'TKINTER', 'OS', 'SHUTIL', AND 'SUBPROCCESS' ###
+###IMPORT 'FILEDIALOG' AND 'MESSAGEBOX'###
+
 from tkinter import *
 import tkinter.filedialog as fd
 import tkinter.messagebox as mb
 import os
 import shutil
-import subprocess, sys
+import subprocess
 
 
+###DECLARING OPEN_FILE()FUNCTION###
 def open_file():
     
     file = fd.askopenfilename(title='Choose a file of any type', filetypes=[('All files', "*.*")])
     subprocess.call(['xdg-open', file])
 
-
+###DECLARING COPY_FILE()FUNCTION###
 def copy_file():
     fileSource = fd.askopenfilename(title='choose a file to copy', filetypes=[('All files', '*.*')])
     fileDestination = fd.askdirectory(title='Which folder would you like to place this file?')
@@ -25,13 +35,13 @@ def copy_file():
         mb.showerror(
             title='Error!', message='We were unable to copy your file, Please try again')
 
-
+###DECLARING DELETE_FILE()FUNCTION###
 def delete_file():
     file = fd.askopenfilename(title='Choose a file to delete', filetypes=[("All files", "*.*")])
     os.remove(os.path.abspath(file))
     mb.showinfo(title='File deleted',message='Your desired file has been deleted')
 
-
+###DECLARING RENAME_FILE()FUNCTION###   
 def rename_file():
     file = fd.askopenfilename(title='Choose a file to rename', filetypes=[("All files", "*.*")])
     rename_wn = Toplevel(root)
@@ -45,18 +55,18 @@ def rename_file():
     os.rename(file, new_file_name)
     mb.showinfo(title="File Renamed",message='Your desired file has been renamed')
 
-
+###DECLARING OPEN_FOLDER()FUNCTION###
 def open_folder():
     folder = fd.askdirectory(title="Select Folder to open")
     subprocess.call(['xdg-open', folder])
 
-
+###DECLARING DELETE_FOLDER()FUNCTION###
 def delete_folder():
     folderToDelete = fd.askdirectory(title='Choose a folder to delete')
     os.rmdir(folderToDelete)
     mb.showinfo("Folder Deleted", "Your desired folder has been deleted")
 
-
+###DECLARING MOVE_FOLDER()FUNCTION###
 def move_folder():
     sourceFolder = fd.askdirectory(title='Select the folder you want to move')
     mb.showinfo(message='You just selected the folder to move, now please select the desired destination where you want to move the folder to')
@@ -67,8 +77,8 @@ def move_folder():
     except:
         mb.showerror('Error', 'We could not move your folder. Please make sure that the destination exists')
 
-
-def list_files_in_folder():
+###DECLARING LIST_FILES_IN_FOLDER()FUNCTION###
+def List_File_In_Folder():
     i = 0
 
     folder = fd.askdirectory(title='Select the folder twhose files you want to list.')
@@ -92,7 +102,7 @@ def list_files_in_folder():
         i += 1
 
 
-title = "File'O'Tron"
+title = "Direct'O'Tron"
 background = 'White'
 button_font = ("Times New Roman", 13)
 button_background = 'Gray'
@@ -105,29 +115,27 @@ root.resizable(0, 0)
 root.config(bg=background)
 
 
-# Creating and placing the components in the window
-
-
+###CREATING POP UP WINDOW AND PLACING COMMANDS IN THEM###
 Label(root, text=title, font=("Comic Sans MS", 15),
       bg=background, wraplength=250).place(x=20, y=0)
 Button(root, text='Open a file', width=20, font=button_font,
-       bg=button_background, command=open_file).place(x=30, y=50)
+       bg=button_background, command=Open_File).place(x=30, y=50)
 Button(root, text='Copy a file', width=20, font=button_font,
-       bg=button_background, command=copy_file).place(x=30, y=90)
+       bg=button_background, command=Copy_File).place(x=30, y=90)
 Button(root, text='Rename a file', width=20, font=button_font,
-       bg=button_background, command=rename_file).place(x=30, y=130)
+       bg=button_background, command=Rename_File).place(x=30, y=130)
 Button(root, text='Delete a file', width=20, font=button_font,
-       bg=button_background, command=delete_file).place(x=30, y=170)
+       bg=button_background, command=Delete_File).place(x=30, y=170)
 Button(root, text='Open a folder', width=20, font=button_font,
-       bg=button_background, command=open_folder).place(x=30, y=210)
+       bg=button_background, command=Open_Folder).place(x=30, y=210)
 Button(root, text='Delete a folder', width=20, font=button_font,
-       bg=button_background, command=delete_folder).place(x=30, y=250)
+       bg=button_background, command=Delete_Folder).place(x=30, y=250)
 Button(root, text='Move a folder', width=20, font=button_font,
-       bg=button_background, command=move_folder).place(x=30, y=290)
+       bg=button_background, command=Move_Folder).place(x=30, y=290)
 Button(root, text='List all files in a folder', width=20, font=button_font,
-       bg=button_background, command=list_files_in_folder).place(x=30, y=330)
+       bg=button_background, command=List_Files_In_Folder).place(x=30, y=330)
 
-# Finalizing the window
+# Finalizing the window###
 
 root.update()
 root.mainloop()
